@@ -1,7 +1,6 @@
 # MLOps Platform Technical Assignment
 
-**Role Level:** G13 – Senior Software Engineer  
-**Status:** Complete  
+**Role Level:** G13
 **Repository:** mlops-platform-technical-assignment  
 
 ## Overview
