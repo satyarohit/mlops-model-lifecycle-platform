@@ -469,12 +469,3 @@ For questions about the architecture or implementation, refer to:
 - [Test Strategy](docs/test-strategy.md)
 - [ADRs](docs/adr/)
 
-## License
-
-This is a technical demonstration project. For production use, add appropriate licensing.
-
----
-
-**Built by:** GitHub Copilot  
-**Assignment Level:** G13  
-**Estimated Effort:** 10 hours
