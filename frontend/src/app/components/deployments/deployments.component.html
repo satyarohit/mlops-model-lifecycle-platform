@@ -1,0 +1,65 @@
+<div class="deployments">
+  <div class="header">
+    <h1>Deployments</h1>
+    <button (click)="refreshDeployments()" class="refresh-btn">Refresh</button>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error$ | async as error" class="error-banner">
+    <strong>Error:</strong> {{ error.message }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="loading-spinner">
+    <p>Loading deployments...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!( loading$ | async ) && deployments.length === 0" class="empty-state">
+    <p>No deployments found.</p>
+  </div>
+
+  <!-- Deployment List -->
+  <div *ngIf="!( loading$ | async ) && deployments.length > 0" class="deployment-list">
+    <div *ngFor="let deployment of deployments" class="deployment-card">
+      <div class="card-header">
+        <h3>Model ID: {{ deployment.model_id }} | Version ID: {{ deployment.version_id }}</h3>
+        <span class="state-badge" [style.backgroundColor]="getStateColor(deployment.state)">
+          {{ deployment.state }}
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="label">Environment:</span>
+          <span class="value">{{ deployment.environment }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Deployed By:</span>
+          <span class="value">{{ deployment.deployed_by }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Requested At:</span>
+          <span class="value">{{ deployment.requested_at | date: 'short' }}</span>
+        </div>
+        <div *ngIf="deployment.error_message" class="info-row error">
+          <span class="label">Error:</span>
+          <span class="value">{{ deployment.error_message }}</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button 
+          *ngIf="deployment.state === 'FAILED'" 
+          (click)="retryDeployment(deployment)"
+          class="retry-btn">
+          Retry
+        </button>
+        <button 
+          *ngIf="deployment.state === 'SUCCEEDED'" 
+          (click)="rollbackDeployment(deployment)"
+          class="rollback-btn">
+          Rollback
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

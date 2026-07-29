@@ -1,0 +1,53 @@
+<div class="model-inventory">
+  <div class="header">
+    <h1>Model Inventory</h1>
+    <button (click)="refreshModels()" class="refresh-btn">Refresh</button>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error$ | async as error" class="error-banner">
+    <strong>Error:</strong> {{ error.message }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="loading-spinner">
+    <p>Loading models...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!( loading$ | async ) && models.length === 0" class="empty-state">
+    <p>No models found. Create your first model to get started.</p>
+  </div>
+
+  <!-- Model List -->
+  <div *ngIf="!( loading$ | async ) && models.length > 0" class="model-list">
+    <div class="table-container">
+      <table class="models-table">
+        <thead>
+          <tr>
+            <th>Model Name</th>
+            <th>Owner</th>
+            <th>Framework</th>
+            <th>Versions</th>
+            <th>Approved</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let model of models" [class]="'model-row'">
+            <td class="name">{{ model.name }}</td>
+            <td>{{ model.owner }}</td>
+            <td>{{ model.framework }}</td>
+            <td class="version-count">{{ getVersionCount(model) }}</td>
+            <td class="approved-count">{{ getApprovedVersionCount(model) }}</td>
+            <td class="date">{{ model.created_at | date: 'short' }}</td>
+            <td class="actions">
+              <button (click)="viewModel(model.id)" class="view-btn">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

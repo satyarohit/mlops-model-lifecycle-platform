@@ -1,0 +1,25 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy frontend files
+COPY frontend/package*.json ./
+
+# Configure npm with longer timeout and retry
+RUN npm config set fetch-timeout 300000 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000 && \
+    npm config set fetch-retries 10 && \
+    npm install --legacy-peer-deps
+
+# Copy remaining frontend files
+COPY frontend .
+
+# Expose port
+EXPOSE 4200
+
+# Serve Angular app
+CMD ["npm", "start"]

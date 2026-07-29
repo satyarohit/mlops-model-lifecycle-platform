@@ -1,0 +1,31 @@
+<div class="app-container">
+  <div class="app-header">
+    <h1>{{ title }}</h1>
+    <nav class="navbar">
+      <button 
+        [class.active]="currentTab === 'inventory'"
+        (click)="setTab('inventory')"
+        class="nav-button">
+        Model Inventory
+      </button>
+      <button 
+        [class.active]="currentTab === 'deployments'"
+        (click)="setTab('deployments')"
+        class="nav-button">
+        Deployments
+      </button>
+      <button 
+        [class.active]="currentTab === 'monitoring'"
+        (click)="setTab('monitoring')"
+        class="nav-button">
+        Monitoring
+      </button>
+    </nav>
+  </div>
+
+  <div class="app-content">
+    <app-model-inventory *ngIf="currentTab === 'inventory'"></app-model-inventory>
+    <app-deployments *ngIf="currentTab === 'deployments'"></app-deployments>
+    <app-monitoring *ngIf="currentTab === 'monitoring'"></app-monitoring>
+  </div>
+</div>

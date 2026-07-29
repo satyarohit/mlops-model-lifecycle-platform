@@ -1,0 +1,67 @@
+<div class="monitoring">
+  <div class="header">
+    <h1>Monitoring Dashboard</h1>
+    <button (click)="refreshMetrics()" class="refresh-btn">Refresh</button>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error$ | async as error" class="error-banner">
+    <strong>Error:</strong> {{ error.message }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="loading-spinner">
+    <p>Loading metrics...</p>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div *ngIf="!( loading$ | async )" class="metrics-grid">
+    <div *ngFor="let item of getMetricsArray()" class="metric-card">
+      <div class="card-header">
+        <h3>Model ID: {{ item.id }}</h3>
+      </div>
+      <div class="card-body">
+        <div *ngIf="item.metrics.latest_metrics" class="metrics-content">
+          <div class="metric-row">
+            <span class="metric-label">Latency (ms):</span>
+            <span class="metric-value">{{ item.metrics.latest_metrics.prediction_latency_ms | number: '1.2-2' }}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Throughput:</span>
+            <span class="metric-value">{{ item.metrics.latest_metrics.throughput | number: '1.0-0' }} req/s</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Error Rate:</span>
+            <span class="metric-value">{{ (item.metrics.latest_metrics.error_rate || 0) * 100 | number: '1.0-2' }}%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Quality Score:</span>
+            <span class="metric-value">{{ item.metrics.latest_metrics.quality_score | number: '1.0-2' }}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Drift Score:</span>
+            <span class="metric-value">{{ item.metrics.latest_metrics.drift_score | number: '1.0-2' }}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Availability:</span>
+            <span class="metric-value">{{ (item.metrics.latest_metrics.availability || 0) * 100 | number: '1.0-2' }}%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Status:</span>
+            <span [class]="'status-' + getHealthStatus(item.metrics.latest_metrics.availability)">
+              {{ getHealthStatus(item.metrics.latest_metrics.availability) }}
+            </span>
+          </div>
+        </div>
+        <div *ngIf="!item.metrics.latest_metrics" class="no-metrics">
+          No metrics available
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!( loading$ | async ) && getMetricsArray().length === 0" class="empty-state">
+    <p>No metrics data available.</p>
+  </div>
+</div>
