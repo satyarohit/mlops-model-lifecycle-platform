@@ -2,10 +2,10 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
 from app.models.domain import Base
+import os
 
-# Configuration
-SQLALCHEMY_DATABASE_URL = "postgresql://mlops:mlops_password@postgres:5432/mlops_db"
-# For PostgreSQL: "postgresql://user:password@localhost/mlops"
+# Configuration - check environment variable first, then default to SQLite
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./mlops.db")
 
 # Engine configuration
 engine = create_engine(
